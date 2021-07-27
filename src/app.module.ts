@@ -1,7 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { AuthMiddleware } from './auth.middleware';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
@@ -9,8 +11,17 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot(), 
     MongooseModule.forRoot(process.env.DATABASE_SERVER), 
     UserModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECREET,
+    }),
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes('user/list');
+  }
+}

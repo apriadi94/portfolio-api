@@ -11,6 +11,11 @@ export class UserController {
         private readonly jwtService: JwtService
     ){}
 
+    @Get('list')
+    async getUser(){
+        return 'tes'
+    }
+
     @Post('login')
     async login(@Body() user: {
         username: string,
