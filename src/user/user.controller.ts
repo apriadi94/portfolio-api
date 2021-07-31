@@ -1,8 +1,9 @@
-import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { Request, Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -12,8 +13,8 @@ export class UserController {
     ){}
 
     @Get('list')
-    async getUser(){
-        return 'tes'
+    async getUser(@Req() req: Request){
+        return req.user
     }
 
     @Post('login')
