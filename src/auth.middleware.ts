@@ -2,6 +2,13 @@ import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/commo
 import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
+export interface dataUser extends Request {
+   user: {
+       id: string,
+       iat: number
+   }
+}
+
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
 
@@ -12,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
             const authHeader = req.headers['authorization']
             const token = authHeader && authHeader.split(' ')[1]
 
-            const data = await this.jwtService.verifyAsync(token)
+            const data: dataUser = await this.jwtService.verifyAsync(token)
             req.user = data
             next()
             

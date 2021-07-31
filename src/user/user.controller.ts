@@ -3,7 +3,7 @@ import { User } from './schemas/user.schema';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Request, Response } from 'express';
+import { dataUser } from '../auth.middleware'
 
 @Controller('user')
 export class UserController {
@@ -13,8 +13,10 @@ export class UserController {
     ){}
 
     @Get('list')
-    async getUser(@Req() req: Request){
-        return req.user
+    async getUser(@Req() req: dataUser){
+        const userId = req.user.id
+        const userData = await this.userService.getUserById(userId)
+        return userData
     }
 
     @Post('login')
