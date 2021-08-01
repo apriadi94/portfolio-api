@@ -11,12 +11,8 @@ export class UserService {
         private readonly UserModel: Model<UserDocument>
     ){}
 
-    async getUserById(id: string) {
-        const data = await this.UserModel.findById(id).exec()
-        return data;
-    }
-
     async getUser(username: string) {
+        console.log(username)
         const data = await this.UserModel.findOne({ username }).exec()
         return data
     }
